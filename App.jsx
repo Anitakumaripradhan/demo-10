@@ -574,7 +574,7 @@ const HomeView = ({ setRoute }) => {
               key={rowIdx}
               className="grid md:grid-cols-2 gap-10 sticky transition-all duration-1000 ease-out"
               style={{ 
-                top: `${140 + (rowIdx * 30)}px`, 
+                top: `${140 + (rowIdx * 100)}px`, 
                 marginBottom: rowIdx === 0 && showAllReviews ? '40vh' : '0',
                 zIndex: rowIdx * 10
               }}
