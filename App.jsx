@@ -110,24 +110,6 @@ const styles = `
   .animate-float-delayed {
     animation: float 6s ease-in-out 3s infinite;
   }
-
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation: none;
-    mix-blend-mode: normal;
-  }
-  ::view-transition-old(root) {
-    z-index: 1;
-  }
-  ::view-transition-new(root) {
-    z-index: 2;
-  }
-  .dark::view-transition-old(root) {
-    z-index: 2;
-  }
-  .dark::view-transition-new(root) {
-    z-index: 1;
-  }
 `;
 
 const ScrollReveal = ({ children, delay = 0 }) => {
@@ -363,8 +345,13 @@ const Navbar = ({ currentRoute, setRoute, theme, toggleTheme }) => {
               </button>
             ))}
             
-            <button onClick={toggleTheme} className="text-gray-500 dark:text-white/60 hover:text-black dark:hover:text-white transition-colors p-2">
-              {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+            <button onClick={toggleTheme} className="relative w-10 h-10 flex items-center justify-center overflow-hidden rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-colors mr-2">
+              <div className={`absolute transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${theme === 'dark' ? 'translate-y-10 -translate-x-10 opacity-0 -rotate-90' : 'translate-y-0 translate-x-0 opacity-100 rotate-0'}`}>
+                <Sun size={20} className="text-[#E6C875]" />
+              </div>
+              <div className={`absolute transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${theme === 'dark' ? 'translate-y-0 translate-x-0 opacity-100 rotate-0' : 'translate-y-10 translate-x-10 opacity-0 rotate-90'}`}>
+                <Moon size={20} className="text-gray-500 dark:text-white/80" />
+              </div>
             </button>
 
             <button 
@@ -374,9 +361,14 @@ const Navbar = ({ currentRoute, setRoute, theme, toggleTheme }) => {
             </button>
           </div>
 
-          <div className="md:hidden flex items-center space-x-4">
-            <button onClick={toggleTheme} className="text-gray-600 dark:text-white/80 transition-colors">
-              {theme === 'dark' ? <Sun size={24} /> : <Moon size={24} />}
+          <div className="md:hidden flex items-center space-x-2">
+            <button onClick={toggleTheme} className="relative w-10 h-10 flex items-center justify-center overflow-hidden rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+              <div className={`absolute transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${theme === 'dark' ? 'translate-y-10 -translate-x-10 opacity-0 -rotate-90' : 'translate-y-0 translate-x-0 opacity-100 rotate-0'}`}>
+                <Sun size={24} className="text-[#E6C875]" />
+              </div>
+              <div className={`absolute transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${theme === 'dark' ? 'translate-y-0 translate-x-0 opacity-100 rotate-0' : 'translate-y-10 translate-x-10 opacity-0 rotate-90'}`}>
+                <Moon size={24} className="text-gray-500 dark:text-white/80" />
+              </div>
             </button>
             <button onClick={() => setIsOpen(!isOpen)} className="text-gray-600 dark:text-white/80 transition-colors">
               {isOpen ? <X size={28} strokeWidth={1.5} /> : <Menu size={28} strokeWidth={1.5} />}
@@ -1075,43 +1067,8 @@ export default function App() {
     }
   }, [theme]);
 
-  const toggleTheme = (e) => {
-    const isDark = theme === 'dark';
-    const nextTheme = isDark ? 'light' : 'dark';
-
-    if (!document.startViewTransition) {
-      setTheme(nextTheme);
-      return;
-    }
-
-    const x = e.clientX || window.innerWidth / 2;
-    const y = e.clientY || window.innerHeight / 2;
-    const endRadius = Math.hypot(
-      Math.max(x, window.innerWidth - x),
-      Math.max(y, window.innerHeight - y)
-    );
-
-    const transition = document.startViewTransition(() => {
-      setTheme(nextTheme);
-    });
-
-    transition.ready.then(() => {
-      const clipPath = [
-        `circle(0px at ${x}px ${y}px)`,
-        `circle(${endRadius}px at ${x}px ${y}px)`,
-      ];
-      
-      document.documentElement.animate(
-        {
-          clipPath: isDark ? clipPath : [...clipPath].reverse(),
-        },
-        {
-          duration: 1000,
-          easing: 'ease-out',
-          pseudoElement: isDark ? '::view-transition-new(root)' : '::view-transition-old(root)',
-        }
-      );
-    });
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
   };
 
   const renderView = () => {
@@ -1132,7 +1089,15 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] dark:bg-black text-gray-900 dark:text-white font-sans selection:bg-[#E6C875]/30 selection:text-[#E6C875] overflow-x-hidden transition-colors duration-500">
+    <div className="min-h-screen bg-[#F8F9FA] dark:bg-black text-gray-900 dark:text-white font-sans selection:bg-[#E6C875]/30 selection:text-[#E6C875] overflow-x-hidden transition-colors duration-1000">
+      {/* Sunrise Overlay Gradient */}
+      <div 
+        className={`fixed inset-0 pointer-events-none transition-opacity duration-1000 ease-in-out z-0 bg-gradient-to-tr from-[#E6C875]/10 via-[#F8F9FA]/50 to-white/80 ${theme === 'light' ? 'opacity-100' : 'opacity-0'}`}
+      />
+      <div 
+        className={`fixed inset-0 pointer-events-none transition-opacity duration-1000 ease-in-out z-0 bg-gradient-to-tr from-[#E6C875]/5 via-black to-black/80 ${theme === 'dark' ? 'opacity-100' : 'opacity-0'}`}
+      />
+      
       <style dangerouslySetInnerHTML={{__html: styles}} />
       
       {/* GLOBAL PARTICLES BACKGROUND */}
