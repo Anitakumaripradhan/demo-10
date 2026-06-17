@@ -565,82 +565,40 @@ const HomeView = ({ setRoute }) => {
           </div>
         </ScrollReveal>
 
-        <div className="relative overflow-hidden w-full pb-10">
-          <div 
-            className="flex transition-transform duration-1000 ease-[cubic-bezier(0.25,1,0.5,1)] w-[200%]"
-            style={{ transform: showAllReviews ? 'translateX(-50%)' : 'translateX(0%)' }}
-          >
-            {/* Page 1 */}
-            <div className="w-1/2 flex-shrink-0 grid md:grid-cols-2 gap-10 px-2">
-              {reviews.slice(0, 2).map((review, idx) => (
-                <ScrollReveal key={idx} delay={(idx % 2 + 1) * 100}>
-                  <div className="bg-white dark:bg-white/[0.02] border border-gray-200 dark:border-white/[0.05] p-12 rounded-[3rem] shadow-2xl dark:shadow-none hover:shadow-3xl dark:hover:bg-white/[0.04] transition-all backdrop-blur-xl h-full flex flex-col justify-between transform hover:-translate-y-2">
-                    <div>
-                      <Quote className="text-[#E6C875]/50 dark:text-[#E6C875]/30 w-12 h-12 mb-8" />
-                      <p className="text-gray-700 dark:text-white/80 text-xl font-light leading-relaxed mb-12">
-                        "{review.quote}"
-                      </p>
-                    </div>
-                    <div className="flex items-center space-x-6 border-t border-gray-200 dark:border-white/10 pt-8 mt-auto">
-                      <div className={`w-16 h-16 bg-gradient-to-br ${review.bg} rounded-full border border-black/10 dark:border-white/20 flex items-center justify-center overflow-hidden shadow-lg dark:shadow-[0_0_20px_rgba(230,200,117,0.2)]`}>
-                        <span className="text-white dark:text-black font-bold text-xl tracking-widest">{review.initials}</span>
-                      </div>
-                      <div>
-                        <h4 className="text-gray-900 dark:text-white font-medium text-xl">{review.name}</h4>
-                        <p className="text-[#B8860B] dark:text-[#E6C875]/70 text-sm mt-1 uppercase tracking-widest font-semibold">{review.role}</p>
-                      </div>
-                    </div>
+        <div className="grid md:grid-cols-2 gap-10">
+          {reviews.slice(0, showAllReviews ? 4 : 2).map((review, idx) => (
+            <ScrollReveal key={idx} delay={(idx % 2 + 1) * 100}>
+              <div className="bg-white dark:bg-white/[0.02] border border-gray-200 dark:border-white/[0.05] p-12 rounded-[3rem] shadow-xl dark:shadow-none hover:shadow-2xl dark:hover:bg-white/[0.03] transition-all backdrop-blur-xl h-full flex flex-col justify-between">
+                <div>
+                  <Quote className="text-[#E6C875]/50 dark:text-[#E6C875]/30 w-12 h-12 mb-8" />
+                  <p className="text-gray-700 dark:text-white/80 text-xl font-light leading-relaxed mb-12">
+                    "{review.quote}"
+                  </p>
+                </div>
+                <div className="flex items-center space-x-6 border-t border-gray-200 dark:border-white/10 pt-8 mt-auto">
+                  <div className={`w-16 h-16 bg-gradient-to-br ${review.bg} rounded-full border border-black/10 dark:border-white/20 flex items-center justify-center overflow-hidden shadow-lg dark:shadow-[0_0_20px_rgba(230,200,117,0.2)]`}>
+                    <span className="text-white dark:text-black font-bold text-xl tracking-widest">{review.initials}</span>
                   </div>
-                </ScrollReveal>
-              ))}
-            </div>
-            {/* Page 2 */}
-            <div className="w-1/2 flex-shrink-0 grid md:grid-cols-2 gap-10 px-2">
-              {reviews.slice(2, 4).map((review, idx) => (
-                <div key={idx} className="bg-white dark:bg-white/[0.02] border border-gray-200 dark:border-white/[0.05] p-12 rounded-[3rem] shadow-2xl dark:shadow-none hover:shadow-3xl dark:hover:bg-white/[0.04] transition-all backdrop-blur-xl h-full flex flex-col justify-between transform hover:-translate-y-2">
                   <div>
-                    <Quote className="text-[#E6C875]/50 dark:text-[#E6C875]/30 w-12 h-12 mb-8" />
-                    <p className="text-gray-700 dark:text-white/80 text-xl font-light leading-relaxed mb-12">
-                      "{review.quote}"
-                    </p>
-                  </div>
-                  <div className="flex items-center space-x-6 border-t border-gray-200 dark:border-white/10 pt-8 mt-auto">
-                    <div className={`w-16 h-16 bg-gradient-to-br ${review.bg} rounded-full border border-black/10 dark:border-white/20 flex items-center justify-center overflow-hidden shadow-lg dark:shadow-[0_0_20px_rgba(230,200,117,0.2)]`}>
-                      <span className="text-white dark:text-black font-bold text-xl tracking-widest">{review.initials}</span>
-                    </div>
-                    <div>
-                      <h4 className="text-gray-900 dark:text-white font-medium text-xl">{review.name}</h4>
-                      <p className="text-[#B8860B] dark:text-[#E6C875]/70 text-sm mt-1 uppercase tracking-widest font-semibold">{review.role}</p>
-                    </div>
+                    <h4 className="text-gray-900 dark:text-white font-medium text-xl">{review.name}</h4>
+                    <p className="text-[#B8860B] dark:text-[#E6C875]/70 text-sm mt-1 uppercase tracking-widest font-semibold">{review.role}</p>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
+              </div>
+            </ScrollReveal>
+          ))}
         </div>
         
-        <div className="mt-8 flex justify-center space-x-6 items-center">
-          <button 
-            onClick={() => setShowAllReviews(false)}
-            className={`w-14 h-14 rounded-full border flex items-center justify-center transition-all duration-500 ${!showAllReviews ? 'border-gray-200 dark:border-white/10 text-gray-300 dark:text-white/20 cursor-not-allowed' : 'border-gray-300 dark:border-white/20 text-gray-900 dark:text-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black hover:border-black dark:hover:border-white'}`}
-            disabled={!showAllReviews}
-          >
-            <ChevronRight className="rotate-180" />
-          </button>
-          
-          <div className="flex space-x-3">
-            <div className={`w-2.5 h-2.5 rounded-full transition-all duration-500 ${!showAllReviews ? 'bg-[#E6C875] scale-150' : 'bg-gray-300 dark:bg-white/20'}`} />
-            <div className={`w-2.5 h-2.5 rounded-full transition-all duration-500 ${showAllReviews ? 'bg-[#E6C875] scale-150' : 'bg-gray-300 dark:bg-white/20'}`} />
+        {!showAllReviews && (
+          <div className="mt-16 text-center">
+            <button 
+              onClick={() => setShowAllReviews(true)}
+              className="bg-transparent text-gray-900 dark:text-white border border-gray-300 dark:border-white/20 px-8 py-4 rounded-full font-bold uppercase tracking-widest text-sm hover:bg-gray-100 dark:hover:bg-white/5 transition-colors duration-500 ease-out"
+            >
+              Read More Reviews
+            </button>
           </div>
-
-          <button 
-            onClick={() => setShowAllReviews(true)}
-            className={`w-14 h-14 rounded-full border flex items-center justify-center transition-all duration-500 ${showAllReviews ? 'border-gray-200 dark:border-white/10 text-gray-300 dark:text-white/20 cursor-not-allowed' : 'border-gray-300 dark:border-white/20 text-gray-900 dark:text-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black hover:border-black dark:hover:border-white'}`}
-            disabled={showAllReviews}
-          >
-            <ChevronRight />
-          </button>
-        </div>
+        )}
       </div>
     </div>
   </div>
