@@ -1219,9 +1219,53 @@ const Footer = () => (
   </footer>
 );
 
+// --- INTRO BOOT SEQUENCE ---
+const BootSequence = ({ onComplete, theme }) => {
+  const [phase, setPhase] = useState(0);
+
+  useEffect(() => {
+    const t1 = setTimeout(() => setPhase(1), 300); // Line appears
+    const t2 = setTimeout(() => setPhase(2), 1000); // Text slides in
+    const t3 = setTimeout(() => setPhase(3), 2400); // Hold
+    const t4 = setTimeout(() => setPhase(4), 3000); // Fly to top-left and fade out overlay
+    const t5 = setTimeout(() => onComplete(), 4000); // Unmount
+
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); clearTimeout(t5); };
+  }, [onComplete]);
+
+  return (
+    <div 
+      className={`fixed inset-0 z-[100] flex items-center justify-center transition-colors duration-1000 ${theme === 'dark' ? 'bg-black' : 'bg-[#F8F9FA]'} ${phase === 4 ? 'bg-transparent pointer-events-none' : ''}`}
+    >
+      <div 
+        className={`flex items-center text-5xl md:text-7xl font-medium tracking-tight overflow-hidden px-10 transition-all duration-1000 ease-[cubic-bezier(0.25,1,0.5,1)] ${phase === 4 ? 'transform -translate-x-[40vw] -translate-y-[45vh] scale-[0.3] opacity-0' : 'opacity-100'}`}
+      >
+        <div 
+          className={`transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] ${phase >= 2 ? 'translate-x-0 opacity-100' : '-translate-x-[150%] opacity-0'} ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}
+        >
+          Ved
+        </div>
+
+        <div 
+          className={`mx-4 text-[#E6C875] font-light transition-all duration-700 ease-out transform ${phase >= 1 ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0'}`}
+        >
+          /
+        </div>
+
+        <div 
+          className={`transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] ${phase >= 2 ? 'translate-x-0 opacity-100' : 'translate-x-[150%] opacity-0'} ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}
+        >
+          Upskilling
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // --- MAIN APP ---
 
 export default function App() {
+  const [bootComplete, setBootComplete] = useState(false);
   const [currentRoute, setCurrentRoute] = useState('home');
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -1261,6 +1305,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#F8F9FA] dark:bg-black text-gray-900 dark:text-white font-sans selection:bg-[#E6C875]/30 selection:text-[#E6C875] overflow-x-clip transition-colors duration-1000">
+      {!bootComplete && <BootSequence onComplete={() => setBootComplete(true)} theme={theme} />}
       {/* Sunrise Overlay Gradient */}
       <div 
         className={`fixed inset-0 pointer-events-none transition-opacity duration-1000 ease-in-out z-0 bg-gradient-to-tr from-[#E6C875]/10 via-[#F8F9FA]/50 to-white/80 ${theme === 'light' ? 'opacity-100' : 'opacity-0'}`}
