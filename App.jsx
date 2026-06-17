@@ -575,7 +575,7 @@ const HomeView = ({ setRoute }) => {
               className="grid md:grid-cols-2 gap-10 sticky transition-all duration-1000 ease-out"
               style={{ 
                 top: `${140 + (rowIdx * 30)}px`, 
-                marginBottom: rowIdx === 0 && showAllReviews ? '15rem' : '0',
+                marginBottom: rowIdx === 0 && showAllReviews ? '40vh' : '0',
                 zIndex: rowIdx * 10
               }}
             >
@@ -1275,7 +1275,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] dark:bg-black text-gray-900 dark:text-white font-sans selection:bg-[#E6C875]/30 selection:text-[#E6C875] overflow-x-hidden transition-colors duration-1000">
+    <div className="min-h-screen bg-[#F8F9FA] dark:bg-black text-gray-900 dark:text-white font-sans selection:bg-[#E6C875]/30 selection:text-[#E6C875] overflow-x-clip transition-colors duration-1000">
       {/* Sunrise Overlay Gradient */}
       <div 
         className={`fixed inset-0 pointer-events-none transition-opacity duration-1000 ease-in-out z-0 bg-gradient-to-tr from-[#E6C875]/10 via-[#F8F9FA]/50 to-white/80 ${theme === 'light' ? 'opacity-100' : 'opacity-0'}`}
