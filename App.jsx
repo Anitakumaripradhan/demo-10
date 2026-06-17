@@ -144,17 +144,17 @@ const ScrollReveal = ({ children, delay = 0 }) => {
 
 const ParticleCanvas = ({ theme }) => {
   const canvasRef = useRef(null);
+  const themeRef = useRef(theme);
+
+  useEffect(() => {
+    themeRef.current = theme;
+  }, [theme]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     let animationFrameId;
     let particles = [];
-    
-    // Dynamic colors based on theme
-    const colors = theme === 'light' 
-      ? ['#E6C875', '#000000', '#555555'] 
-      : ['#E6C875', '#ffffff', '#444444']; 
     
     let mouse = { x: null, y: null, radius: 350 };
 
@@ -186,7 +186,7 @@ const ParticleCanvas = ({ theme }) => {
         this.baseSpeedY = (Math.random() - 0.5) * 0.5;
         this.speedX = this.baseSpeedX;
         this.speedY = this.baseSpeedY;
-        this.color = colors[Math.floor(Math.random() * colors.length)];
+        this.colorType = Math.floor(Math.random() * 3);
         this.orbitRadius = Math.random() * 120 + 20; 
       }
       
@@ -242,7 +242,11 @@ const ParticleCanvas = ({ theme }) => {
       }
       
       draw() {
-        ctx.fillStyle = this.color;
+        const currentColors = themeRef.current === 'light' 
+          ? ['#E6C875', '#000000', '#555555'] 
+          : ['#E6C875', '#ffffff', '#444444']; 
+        
+        ctx.fillStyle = currentColors[this.colorType];
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
@@ -270,7 +274,7 @@ const ParticleCanvas = ({ theme }) => {
           
           if (distance < 90) {
             ctx.beginPath();
-            ctx.strokeStyle = theme === 'light' 
+            ctx.strokeStyle = themeRef.current === 'light' 
               ? `rgba(0, 0, 0, ${0.15 - distance/600})`
               : `rgba(230, 200, 117, ${0.1 - distance/900})`;
             ctx.lineWidth = 0.5;
@@ -293,7 +297,7 @@ const ParticleCanvas = ({ theme }) => {
       window.removeEventListener('mouseout', handleMouseOut);
       cancelAnimationFrame(animationFrameId);
     };
-  }, [theme]);
+  }, []);
 
   return (
     <canvas 
@@ -1101,7 +1105,7 @@ export default function App() {
       <style dangerouslySetInnerHTML={{__html: styles}} />
       
       {/* GLOBAL PARTICLES BACKGROUND */}
-      <ParticleCanvas key={`${currentRoute}-${theme}`} theme={theme} />
+      <ParticleCanvas key={currentRoute} theme={theme} />
       
       <Navbar currentRoute={currentRoute} setRoute={setCurrentRoute} theme={theme} toggleTheme={toggleTheme} />
       
