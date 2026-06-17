@@ -1,9 +1,18 @@
 <!doctype html>
-<html lang="en" class="dark" style="background-color: black;">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ved/Upskilling</title>
+    <script>
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.classList.add('dark');
+        document.documentElement.style.backgroundColor = 'black';
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.documentElement.style.backgroundColor = '#F8F9FA';
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
